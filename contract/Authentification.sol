@@ -37,4 +37,16 @@ contract Authentification {
         delete users[_userAddress];
         emit UserRemoved(_userAddress);
     }
+
+    function getUserRole(address _userAddress) public view userExists(_userAddress) returns (string memory) {
+        return users[_userAddress].role;
+    }
+
+    function isUserInRole(address _userAddress, string memory _role) public view userExists(_userAddress) returns (bool) {
+        return keccak256(abi.encodePacked(users[_userAddress].role)) == keccak256(abi.encodePacked(_role));
+    }
+
+    function isAuthorized(address _userAddress, string memory _role) public view userExists(_userAddress) returns (bool) {
+        return keccak256(abi.encodePacked(users[_userAddress].role)) == keccak256(abi.encodePacked(_role)) || keccak256(abi.encodePacked(users[_userAddress].role)) == keccak256(abi.encodePacked("admin"));
+    }
 }
