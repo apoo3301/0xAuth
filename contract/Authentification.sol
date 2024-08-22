@@ -26,4 +26,15 @@ contract Authentification {
         require(users[_userAddress].exists, "User does not exist");
         _;
     }
+
+    function addUser(address _userAddress, string memory _role, string memory _name) public onlyOwner {
+        require(!users[_userAddress].exists, "User already exists");
+        users[_userAddress] = User(_role, _name, true);
+        emit UserAdded(_userAddress, _role, _name);
+    }
+
+    function removeUser(address _userAddress) public onlyOwner userExists(_userAddress) {
+        delete users[_userAddress];
+        emit UserRemoved(_userAddress);
+    }
 }
